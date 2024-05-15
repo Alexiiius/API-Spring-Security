@@ -1,6 +1,8 @@
 package com.alex.APISECURITY.service;
 
 
+import com.alex.APISECURITY.controller.dto.AuthResponse;
+import com.alex.APISECURITY.controller.dto.LoginRequest;
 import com.alex.APISECURITY.models.UserEntity;
 import com.alex.APISECURITY.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 userEntity.getCredentialNoExpired(),
                 userEntity.getAccountNoLocked(),
                 authorityList);
+    }
+
+
+    public AuthResponse loginUser(LoginRequest loginRequest){
+        
     }
 
 

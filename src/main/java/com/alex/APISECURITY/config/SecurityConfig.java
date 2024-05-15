@@ -1,6 +1,10 @@
 package com.alex.APISECURITY.config;
 
+
+import com.alex.APISECURITY.config.filter.JwtTokenValidator;
 import com.alex.APISECURITY.service.UserDetailServiceImpl;
+import com.alex.APISECURITY.util.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,6 +25,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +35,9 @@ import java.util.List;
 @EnableMethodSecurity
 //must use enabled method security to permit the use of annotations in the controller endpoints
 public class SecurityConfig {
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     //Los pasos de la peticion http pasa a traves del security filter chain
     //Seguidamente, se llamara al authentication manager que usara los prooveedores para verificar al usuario
@@ -66,6 +74,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //@PreAuthorize in the routes controller to define endpoints security access
+                .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
     }
 
